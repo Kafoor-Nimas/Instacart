@@ -8,7 +8,6 @@ import {
   PackageIcon,
   SearchIcon,
   ShieldIcon,
-  ShoppingCart,
   ShoppingCartIcon,
   UserIcon,
   XIcon,
