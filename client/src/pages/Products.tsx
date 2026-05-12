@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { Product } from "../types";
-import { dummyProducts } from "../assets/assets";
+import { categoriesData, dummyProducts } from "../assets/assets";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,6 +37,12 @@ const Products = () => {
     }
     setSearchParams(newParams);
   };
+
+  const clearFilters = () => setSearchParams({});
+
+  const activeCategory = categoriesData.find((c) => c.slug === category);
+
+  const hasFilters = category || organic || minPrice || maxPrice;
 
   useEffect(() => {
     fetchProducts();
