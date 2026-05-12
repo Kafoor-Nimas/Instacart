@@ -11,7 +11,7 @@ const ProductCard = ({ product }: Props) => {
   const {setIsCartOpen}=useCart()
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL;
 
-  const { addToCart } = { addToCart: (_data: any) => {} };
+  const { addToCart } = useCart()
   const navigate = useNavigate();
   return (
     <div

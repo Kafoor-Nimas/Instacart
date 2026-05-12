@@ -272,8 +272,8 @@ export const dummyProducts = [
     name: "Carrot 500g",
     description:
       "Sweet and crunchy, Good for eyesight, Ideal for juices and salads",
-    price: 44,
-    originalPrice: 50,
+    price: 18,
+    originalPrice: 24,
     image:
       "https://raw.githubusercontent.com/avinashdm/gs-images/main/greencart/ceqgisupuizyste9aifg.png",
     category: "fruits-vegetables",

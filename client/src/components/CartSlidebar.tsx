@@ -78,7 +78,7 @@ const CartSlidebar = () => {
                   <h4 className="text-sm font-semibold truncate">
                     {item.product.name}
                   </h4>
-                  <p>
+                  <p className="text-xs text-app-text-light">
                     {currency}
                     {item.product.price.toFixed(2)} / {item.product.unit}
                   </p>
