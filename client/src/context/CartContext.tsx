@@ -53,7 +53,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) => prev.filter((item) => item.product._id !== productId));
   };
 
-  const updateQunatity = (productId: string, quantity: number) => {
+  const updateQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
@@ -65,7 +65,35 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   };
 
-  return <CartContext.Provider value={{}}>{children}</CartContext.Provider>;
+  const clearCart = () => {
+    setItems([]);
+    setIsCartOpen(false);
+  };
+
+  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+
+  const cartTotal = items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0,
+  );
+
+  return (
+    <CartContext.Provider
+      value={{
+        items,
+        isCartOpen,
+        setIsCartOpen,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        cartCount,
+        cartTotal,
+        clearCart,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 }
 
 export function useCart() {
