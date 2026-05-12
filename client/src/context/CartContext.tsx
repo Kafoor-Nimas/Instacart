@@ -49,6 +49,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsCartOpen(true);
   };
 
+  const removeFromCart = (productId: string) => {
+    setItems((prev) => prev.filter((item) => item.product._id !== productId));
+  };
+
+  const updateQunatity = (productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    setItems((prev) =>
+      prev.map((item) =>
+        item.product._id === productId ? { ...item, quantity } : item,
+      ),
+    );
+  };
+
   return <CartContext.Provider value={{}}>{children}</CartContext.Provider>;
 }
 
