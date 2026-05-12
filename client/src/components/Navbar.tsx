@@ -16,13 +16,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
-const Navbar = () => { 
+const Navbar = () => {
   const user: any = {
     name: "John Doe",
     email: "john@example.com",
     isAdmin: true,
   };
-  const { cartCount, setIsCartOpen } = useCart()
+  const { cartCount, setIsCartOpen } = useCart();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
