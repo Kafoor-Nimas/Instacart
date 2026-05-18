@@ -44,6 +44,25 @@ const ProductPage = () => {
 
   const categoryLabel = product.category.replace(/-/g, " ");
 
+  const handleMinus = () => {
+    if (inCart) {
+      if (cartItem.quantity > 1) {
+        updateQuantity(product._id, cartItem.quantity - 1);
+      } else {
+        removeFromCart(product._id);
+      }
+    } else {
+      setLocalQuantity(Math.max(1, localQuantity - 1));
+    }
+  };
+  const handlePlus = () => {
+    if (inCart) {
+      updateQuantity(product._id, cartItem.quantity + 1);
+    } else {
+      setLocalQuantity(localQuantity + 1);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -172,13 +191,13 @@ const ProductPage = () => {
               <div className="flex items-center gap-3">
                 {/* Quantity */}
                 <div className="flex items-center border border-app-border rounded-xl overflow-hidden">
-                  <button className="p-3 hover:bg-app-cream transition-colors">
+                  <button onClick={handleMinus} className="p-3 hover:bg-app-cream transition-colors">
                     <MinusIcon className="w-4 h-4" />
                   </button>
                   <span className="px-5 text-sm font-semibold min-w-[40px] text-center">
                     {displayQuantity}
                   </span>
-                  <button className="p-3 hover:bg-app-cream transition-colors">
+                  <button onClick={handlePlus} className="p-3 hover:bg-app-cream transition-colors">
                     <PlusIcon className="w-4 h-4" />
                   </button>
                 </div>
