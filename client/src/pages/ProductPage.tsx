@@ -2,7 +2,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useEffect, useState } from "react";
 import type { Product } from "../types";
-import { dummyProducts } from "../assets/assets";
 import Loading from "../components/Loading";
 import {
   ArrowLeftIcon,
@@ -13,6 +12,8 @@ import {
   ShoppingCartIcon,
   StarIcon,
 } from "lucide-react";
+import DummyReviewsSection from "../components/DummyReviewsSection";
+import { dummyProducts } from "../assets/assets";
 
 const ProductPage = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
@@ -191,13 +192,19 @@ const ProductPage = () => {
               <div className="flex items-center gap-3">
                 {/* Quantity */}
                 <div className="flex items-center border border-app-border rounded-xl overflow-hidden">
-                  <button onClick={handleMinus} className="p-3 hover:bg-app-cream transition-colors">
+                  <button
+                    onClick={handleMinus}
+                    className="p-3 hover:bg-app-cream transition-colors"
+                  >
                     <MinusIcon className="w-4 h-4" />
                   </button>
                   <span className="px-5 text-sm font-semibold min-w-[40px] text-center">
                     {displayQuantity}
                   </span>
-                  <button onClick={handlePlus} className="p-3 hover:bg-app-cream transition-colors">
+                  <button
+                    onClick={handlePlus}
+                    className="p-3 hover:bg-app-cream transition-colors"
+                  >
                     <PlusIcon className="w-4 h-4" />
                   </button>
                 </div>
@@ -219,6 +226,7 @@ const ProductPage = () => {
         </div>
 
         {/* Customer Reviews Section*/}
+        {product.reviewCount > 0 && <DummyReviewsSection product={product} />}
 
         {/* Related Products Section*/}
       </div>
