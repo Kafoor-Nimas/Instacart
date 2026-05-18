@@ -11,6 +11,7 @@ import MyOrders from "./pages/MyOrders";
 import OrderTracking from "./pages/OrderTracking";
 import Addresses from "./pages/Addresses";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProductPage from "./pages/ProductPage";
 
 const App = () => {
   return (
@@ -37,8 +38,9 @@ const App = () => {
           <Route path="/products" element={<Products />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/deals" element={<FlashDeals />} />
+          <Route path="/products/:id" element={<ProductPage />} />
           {/* Protected Route */}
-          <Route element={<ProtectedRoute/>}>
+          <Route element={<ProtectedRoute />}>
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/orders" element={<MyOrders />} />
             <Route path="/order/:id" element={<OrderTracking />} />

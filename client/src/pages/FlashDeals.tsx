@@ -12,7 +12,7 @@ const FlashDeals = () => {
   useEffect(() => {
     setProducts(dummyProducts.filter((p: any) => p.stock > 0));
     setTimeout(() => setLoading(false), 1000);
-  });
+  },[]);
   return (
     <div className="min-h-screen bg-app-cream">
       {/* Banner */}
