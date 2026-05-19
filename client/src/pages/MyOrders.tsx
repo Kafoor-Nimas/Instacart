@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import type { Order } from "../types";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { dummyDashboardOrdersData } from "../assets/assets";
+import { dummyDashboardOrdersData, statusColors } from "../assets/assets";
+import Loading from "../components/Loading";
+import { CalendarIcon, ChevronRightIcon, PackageIcon } from "lucide-react";
 
 const MyOrders = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
@@ -40,8 +42,81 @@ const MyOrders = () => {
         </h1>
 
         {/* Tabs */}
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors ${activeTab === tab ? "bg-app-green text-white" : "bg-white text-app-text-light hover:bg-app-cream"}`}
+            >
+              {tab === "all" ? "All Orders" : tab}
+            </button>
+          ))}
+        </div>
 
         {/* Orders List */}
+        {loading ? (
+          <Loading />
+        ) : orders.length === 0 ? (
+          <div className="text-center py-16">
+            <PackageIcon className="size-16 text-app-border mx-auto mb-4" />
+            <h2 className="text-lg font-medium text-app-green mb-2">
+              No orders yet
+            </h2>
+            <p className="text-sm text-app-text-light mb-4">
+              Start shopping to see your orders here
+            </p>
+            <Link
+              to={"/products"}
+              className="inline-flex px-4 py-2 bg-app-green text-white text-sm rounded-lg"
+            >
+              Start shopping
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {orders.map((order) => (
+              <Link
+                key={order._id}
+                to={`/orders/${order._id}`}
+                className="block max-w-4xl bg-white rounded-2xl p-5 hover:shadow transition-all"
+              >
+                {/* order id, date & status */}
+                <div className="flex items-start justify-between mb-3">
+                  {/* Left */}
+                  <div>
+                    <p className="text-sm font-medium text-app-green">
+                      Order #{order._id.slice(-8).toUpperCase()}
+                      <div className="flex items-center gap-2 mt-1">
+                        <CalendarIcon className="size-3 text-app-text-light" />
+                        <span className="text-xs text-app-text-light">
+                          {new Date(order.createdAt).toLocaleDateString(
+                            "en-Us",
+                            { month: "short", day: "numeric", year: "numeric" },
+                          )}
+                        </span>
+                      </div>
+                    </p>
+                  </div>
+
+                  {/* Right */}
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`px-4 py-1 text-xs font-medium rounded-full ${statusColors[order.status] || "bg-gray-100 text-gray-700"}`}
+                    >
+                      {order.status}
+                    </span>
+                    <ChevronRightIcon className="size-4 text-app-text-light" />
+                  </div>
+                </div>
+
+                {/* Item thumbnails */}
+
+                {/* total Items & price */}
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
