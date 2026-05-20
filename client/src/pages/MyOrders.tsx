@@ -78,14 +78,14 @@ const MyOrders = () => {
             {orders.map((order) => (
               <Link
                 key={order._id}
-                to={`/orders/${order._id}`}
+                to={`/order/${order._id}`}
                 className="block max-w-4xl bg-white rounded-2xl p-5 hover:shadow transition-all"
               >
                 {/* order id, date & status */}
                 <div className="flex items-start justify-between mb-3">
                   {/* Left */}
                   <div>
-                    <p className="text-sm font-medium text-app-green">
+                    <div className="text-sm font-medium text-app-green">
                       Order #{order._id.slice(-8).toUpperCase()}
                       <div className="flex items-center gap-2 mt-1">
                         <CalendarIcon className="size-3 text-app-text-light" />
@@ -96,7 +96,7 @@ const MyOrders = () => {
                           )}
                         </span>
                       </div>
-                    </p>
+                    </div>
                   </div>
 
                   {/* Right */}
