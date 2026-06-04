@@ -6,6 +6,7 @@ import { dummyDashboardOrdersData } from "../assets/assets";
 import { ArrowLeftIcon } from "lucide-react";
 import OrderOTP from "../components/OrderTracking/OrderOTP";
 import LiveMap from "../components/OrderTracking/LiveMap";
+import OrderTimeLine from "../components/OrderTracking/OrderTimeLine";
 
 const OrderTracking = () => {
   const { id } = useParams();
@@ -64,6 +65,8 @@ const OrderTracking = () => {
             <OrderOTP order={order} />
             {/* Live Tracking Map */}
             <LiveMap order={order} liveLocation={liveLocation} />
+            {/* Progress Timeline */}
+            <OrderTimeLine order={order}/>
           </div>
 
           {/* Right side - Order Details */}
