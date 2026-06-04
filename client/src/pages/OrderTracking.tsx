@@ -9,6 +9,7 @@ import LiveMap from "../components/OrderTracking/LiveMap";
 import OrderTimeLine from "../components/OrderTracking/OrderTimeLine";
 
 const OrderTracking = () => {
+  const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
   const { id } = useParams();
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
@@ -113,6 +114,38 @@ const OrderTracking = () => {
                 {order?.shippingAddress.city},{order?.shippingAddress.state}
                 {order?.shippingAddress.zip}
               </p>
+            </div>
+
+            {/* Items */}
+            <div className="bg-white rounded-2xl p-5">
+              <h3 className="text-sm font-semibold text-app-green mb-3">
+                Items ({order?.items.length})
+              </h3>
+
+              <div className="space-y-3">
+                {order?.items.map((item, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="size-10 rounded-lg object-cover"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-app-green truncate">
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-app-text-light">
+                        x{item.quantity}
+                      </p>
+                    </div>
+
+                    <span className="text-sm font-semibold">
+                      {currency}
+                      {(item.price * item.quantity).toFixed(2)}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
