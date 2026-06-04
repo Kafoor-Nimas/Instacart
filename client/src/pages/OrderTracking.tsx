@@ -4,6 +4,7 @@ import type { Order } from "../types";
 import Loading from "../components/Loading";
 import { dummyDashboardOrdersData } from "../assets/assets";
 import { ArrowLeftIcon } from "lucide-react";
+import OrderOTP from "../components/OrderTracking/OrderOTP";
 
 const OrderTracking = () => {
   const { id } = useParams();
@@ -53,11 +54,17 @@ const OrderTracking = () => {
           >
             {order!.status}
           </span>
-        </div> 
+        </div>
 
-        
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Left side - Timeline + Map Area */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* OTP Card */}
+            <OrderOTP order={order} />
+          </div>
 
-
+          {/* Right side - Order Details */}
+        </div>
       </div>
     </div>
   );
