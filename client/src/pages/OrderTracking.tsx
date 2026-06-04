@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import type { Order } from "../types";
 import Loading from "../components/Loading";
 import { dummyDashboardOrdersData } from "../assets/assets";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, PhoneIcon } from "lucide-react";
 import OrderOTP from "../components/OrderTracking/OrderOTP";
 import LiveMap from "../components/OrderTracking/LiveMap";
 import OrderTimeLine from "../components/OrderTracking/OrderTimeLine";
@@ -66,7 +66,35 @@ const OrderTracking = () => {
             {/* Live Tracking Map */}
             <LiveMap order={order} liveLocation={liveLocation} />
             {/* Progress Timeline */}
-            <OrderTimeLine order={order}/>
+            <OrderTimeLine order={order} />
+
+            {/* Delivery Partner */}
+            {order?.deliveryPartner && order.status !== "Delivered" && (
+              <div className="bg-white rounded-2xl p-5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="size-11 rounded-full bg-app-green flex-center">
+                    <span className="text-white font-semibold text-sm">
+                      {order.deliveryPartner.name.charAt(0)}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-app-green">
+                      {order.deliveryPartner.name}
+                    </p>
+                    <p className="text-sm text-app-text-light capitalize">
+                      {order.deliveryPartner.vehicleType} • Delivery Partner
+                    </p>
+                  </div>
+                </div>
+
+                <a
+                  href={`tel:${order.deliveryPartner.phone}`}
+                  className="p-2.5 bg-app-cream rounded-xl hover:bg-app-cream-dark transition-colors"
+                >
+                  <PhoneIcon className="size-4 text-app-green" />
+                </a>
+              </div>
+            )}
           </div>
 
           {/* Right side - Order Details */}
