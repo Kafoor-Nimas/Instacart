@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { Address } from "../types";
 import { dummyAddressData } from "../assets/assets";
+import { PlusIcon } from "lucide-react";
+import Loading from "../components/Loading";
 
 const Addresses = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -51,7 +53,34 @@ const Addresses = () => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
-  return <div>Addresses</div>;
+  return (
+    <div className="min-h-screen bg-app-cream">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page header */}
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-semibold text-app-green">
+            My Addresses
+          </h1>
+          <button
+            onClick={() => {
+              resetForm();
+              setShowForm(true);
+            }}
+            className="px-4 py-2 bg-app-green text-white text-sm font-semibold rounded-xl hover:bg-app-green-light transition-colors flex items-center gap-2"
+          >
+            <PlusIcon className="size-4" /> Add Address
+          </button>
+        </div>
+
+        {/* Form Modal */}
+
+        {/* Address List */}
+        {loading ? <Loading /> : addresses.length === 0 ? (
+          <div></div>
+        ):""}
+      </div>
+    </div>
+  );
 };
 
 export default Addresses;
