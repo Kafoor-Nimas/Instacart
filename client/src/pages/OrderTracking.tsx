@@ -177,7 +177,7 @@ const OrderTracking = () => {
                     {order?.total.toFixed(2)}
                   </span>
                 </div>
-              </div>
+              </div> 
             </div>
           </div>
         </div>

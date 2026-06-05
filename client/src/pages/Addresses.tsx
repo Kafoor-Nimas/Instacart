@@ -1,8 +1,21 @@
+import { useState } from "react";
+import type { Address } from "../types";
 
 const Addresses = () => {
-  return (
-    <div>Addresses</div>
-  )
-}
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState({
+    label: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    isDefault: false,
+  });
 
-export default Addresses
+  return <div>Addresses</div>;
+};
+
+export default Addresses;
