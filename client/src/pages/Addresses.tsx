@@ -1,5 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import type { Address } from "../types";
+import { dummyAddressData } from "../assets/assets";
 
 const Addresses = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -14,6 +15,41 @@ const Addresses = () => {
     zip: "",
     isDefault: false,
   });
+
+  const resetForm = () => {
+    setForm({
+      label: "",
+      address: "",
+      city: "",
+      state: "",
+      zip: "",
+      isDefault: false,
+    });
+    setShowForm(false);
+    setEditingId(null);
+  };
+
+  const handleSubmit = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+  };
+
+  const onEditHandler = (address: Address) => {
+    setForm({
+      label: address.label,
+      address: address.address,
+      city: address.city,
+      state: address.state,
+      zip: address.zip,
+      isDefault: address.isDefault,
+    });
+    setEditingId(address._id);
+    setShowForm(true);
+  };
+
+  useEffect(() => {
+    setAddresses(dummyAddressData);
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
 
   return <div>Addresses</div>;
 };
