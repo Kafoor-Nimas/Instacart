@@ -3,7 +3,13 @@ import { useCart } from "../context/CartContext";
 import { dummyAddressData } from "../assets/assets";
 import { useState } from "react";
 import type { Address } from "../types";
-import { CheckIcon, CreditCard, MapPinIcon } from "lucide-react";
+import {
+  ArrowLeft,
+  CheckIcon,
+  ChevronRightIcon,
+  CreditCard,
+  MapPinIcon,
+} from "lucide-react";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -67,15 +73,56 @@ const Checkout = () => {
     return (
       <div className="min-h-screen bg-app-cream flex-center">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-app-green mb-2">Your cart is empty</h2>
-          <p className="text-sm text-app-text-light mb-4">Add some items to your cart before proceeding to checkout.</p>
-          <button onClick={() => navigate("/products")} className="px-5 py-2.5 bg-app-green text-white text-sm font-medium rounded-xl hover:bg-app-green-light transition-colors">Browse Products</button>
+          <h2 className="text-xl font-semibold text-app-green mb-2">
+            Your cart is empty
+          </h2>
+          <p className="text-sm text-app-text-light mb-4">
+            Add some items to your cart before proceeding to checkout.
+          </p>
+          <button
+            onClick={() => navigate("/products")}
+            className="px-5 py-2.5 bg-app-green text-white text-sm font-medium rounded-xl hover:bg-app-green-light transition-colors"
+          >
+            Browse Products
+          </button>
         </div>
       </div>
     );
   }
 
-  return <div>Checkout</div>;
+  return (
+    <div className="min-h-screen bg-app-cream">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-sm text-app-text-light hover:text-app-green mb-6 transition-colors"
+        >
+          <ArrowLeft className="size-4" /> Back
+        </button>
+
+        <h1 className="text-2xl font-semibold text-app-green mb-8">Checkout</h1>
+
+        {/* Steps */}
+        <div className="flex items-center gap-2 mb-8">
+          {steps.map((s, i) => (
+            <div key={s.key} className="flex items-center gap-2">
+              <button
+                onClick={() => setStep(s.key)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${step === s.key ? "bg-app-green text-white" : "bg-white text-app-text-light"}`}
+              >
+                <s.icon className="size-4" />
+                {s.label}
+                {i < steps.length - 1 && (
+                  <ChevronRightIcon className="size-4 text-spp-text-light" />
+                )}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Checkout;
