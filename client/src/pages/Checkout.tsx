@@ -10,6 +10,9 @@ import {
   CreditCard,
   MapPinIcon,
 } from "lucide-react";
+import CheckoutAddress from "../components/Checkout/CheckoutAddress";
+import CheckoutPayment from "../components/Checkout/CheckoutPayment";
+import CheckoutReview from "../components/Checkout/CheckoutReview";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -119,6 +122,38 @@ const Checkout = () => {
               </button>
             </div>
           ))}
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Main Form */}
+          <div className="md:col-span-2">
+            {step === "address" && (
+              <CheckoutAddress
+                address={address}
+                setAddress={setAddress}
+                setStep={setStep}
+                user={user}
+              />
+            )}
+            {step === "payment" && (
+              <CheckoutPayment
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
+                setStep={setStep}
+              />
+            )}
+            {step === "review" && (
+              <CheckoutReview
+                address={address}
+                items={items}
+                handlePlaceOrder={handlePlaceOrder}
+                loading={loading}
+                total={total}
+              />
+            )}
+          </div>
+
+          {/* Order Summary Sidebar */}
         </div>
       </div>
     </div>
