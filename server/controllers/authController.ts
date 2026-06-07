@@ -1,6 +1,23 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma.js";
 import bcrypt from "bcrypt";
+import Jwt from "jsonwebtoken";
+
+// Generate JWT token
+const generateToken = (id: string) => {
+  return Jwt.sign({ id }, process.env.JWT_SECRET as string, {
+    expiresIn: "30d",
+  });
+};
+
+// Check if user is admin
+const getAdminStatus = (email: string | null | undefined): boolean => {
+  if (!email) return false;
+  const adminEmails = process.env.ADMIN_EMAILS
+    ? process.env.ADMIN_EMAILS.split(",").map((e) => e.trim().toLowerCase())
+    : [];
+  return adminEmails.includes(email.toLowerCase());
+};
 
 // Register
 // POST /api/auth/register
@@ -26,4 +43,12 @@ export const register = async (req: Request, res: Response) => {
   const user = await prisma.user.create({
     data: { name, email: email.toLowerCase(), password: hashedPassword },
   });
+
+  const token = generateToken(user.id);
+
+  const userData: any = { ...user };
+  delete userData.password;
+  userData.isAdmin = getAdminStatus(userData.email);
+
+  res.status(201).json({ user: userData, token });
 };
