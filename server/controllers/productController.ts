@@ -72,3 +72,25 @@ export const getProduct = async (req: Request, res: Response) => {
 
   res.json({ product: { ...product, discount } });
 };
+
+// POST /api/products
+export const createProduct = async (req: Request, res: Response) => {
+  const product = await prisma.product.create({ data: req.body });
+
+  res.status(201).json({ product });
+};
+
+// PUT /api/products/:id
+export const updateProduct = async (req: Request, res: Response) => {
+  const product = await prisma.product.update({
+    where: { id: req.params.id as string },
+    data: req.body,
+  });
+  res.json({ product });
+};
+
+// DELETE /api/products/:id
+export const deleteProduct = async (req: Request, res: Response) => {
+  await prisma.product.delete({ where: { id: req.params.id as string } });
+  res.json({ message: "Deleted" });
+};
