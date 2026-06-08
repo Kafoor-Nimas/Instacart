@@ -1,4 +1,4 @@
-import { jwt } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 
 const auth = (req: Request, res: Response, next: NextFunction) => {
@@ -23,3 +23,5 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({ message: "Token is not valid" });
   }
 };
+
+export default auth;
