@@ -28,6 +28,9 @@ export const createOrder = async (req: Request, res: Response) => {
   }
 
   const orderItems = items.map((item: any) => {
+    // looks up the product by id:
+    // item.product = "abc123"
+    // productMap["abc123"] = { name: "Apple", price: 2.99, stock: 10 }
     const dbProduct = productMap[item.product];
     if (!dbProduct) throw new Error(`Product ${item.product} not found`);
     return {
@@ -73,7 +76,7 @@ export const createOrder = async (req: Request, res: Response) => {
     // stripe payment link
   }
   //  if cash
-  res.json({ order });
+  res.json({ order }); // send order back to frontend
 
   //   Decrease stock
   for (const item of orderItems) {
@@ -82,4 +85,30 @@ export const createOrder = async (req: Request, res: Response) => {
       data: { stock: { decrement: item.quantity } },
     });
   }
+};
+
+// Get user's orders
+// Get /api/orders
+export const getUserOrders = async (req: Request, res: Response) => {
+  const { status } = req.query;
+
+  //   Get all my orders EXCEPT ones where:
+  //- payment method is card AND payment is not done yet
+  const where: any = {
+    userId: req.user?.id,
+    NOT: [{ paymentMethod: "card", isPaid: "false" }],
+  };
+
+  if (status && status !== "all") {
+    where.status = status;
+  }
+
+  const orders = await prisma.order.findMany({
+    where,
+    // join the deliveryPartner table but only give me name and phone, nothing else
+    include: { deliveryPartner: { select: { name: true, phone: true } } },
+    orderBy: { createdAt: "desc" },
+  });
+
+  res.json({ orders });
 };
