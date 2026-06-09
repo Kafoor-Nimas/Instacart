@@ -130,3 +130,34 @@ export const getSingleOrder = async (req: Request, res: Response) => {
 
   res.json({ order });
 };
+
+// Update order status (admin)
+// PUT /api/orders/:id/status
+export const updateOrderStatus = async (req: Request, res: Response) => {
+  const { status, note } = req.body;
+
+  const order = await prisma.order.findUnique({
+    where: { id: req.params.id as string },
+  });
+
+  if (!order) {
+    return res.status(404).json({ message: "Order not found" });
+  }
+
+  const history = (
+    Array.isArray(order.statusHistory) ? order.statusHistory : []
+  ) as any[];
+
+  history.push({
+    status,
+    note: note || `Order ${status.toLowerCase()}`,
+    timestamp: new Date(),
+  });
+
+  const updatedOrder = await prisma.order.update({
+    where: { id: req.params.id as string },
+    data: { status, statusHistory: history },
+  });
+
+  res.json({ order: updatedOrder });
+};
