@@ -70,7 +70,7 @@ const sendMonthlyOffers = inngest.createFunction(
   {
     id: "send-monthly-offers",
     name: "Monthly Payday Offers",
-    triggers: [cron("0 10 1 **")],
+    triggers: [{ cron: "0 10 1 * *" }], // ✅ 5 parts with space between * *,
   },
   async ({ step }) => {
     const { deals, users } = await step.run(
