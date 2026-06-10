@@ -247,4 +247,9 @@ const autoAssignRider = inngest.createFunction(
   },
 );
 
+/*
+Order placed     → wait 5min → auto assign rider    (autoAssignRider)
+Stock updated    → stock low? → email admin          (checkLowStock)
+1st of month     → send deals to all users           (sendMonthlyOffers)
+ */
 export const functions = [checkLowStock, sendMonthlyOffers, autoAssignRider];
