@@ -57,3 +57,50 @@ export const addAddress = async (req: Request, res: Response) => {
   });
   res.status(201).json({ addresses });
 };
+
+// Update address
+// PUT /api/addresses/:id
+export const updateAddress = async (req: Request, res: Response) => {
+  const { label, address, city, state, zip, isDefault, lat, lng } = req.body;
+
+  //   Require coordinates
+  if (lat == null || lng == null) {
+    return res.status(400).json({
+      message:
+        "Location coordinates are required. Please allow location access.",
+    });
+  }
+
+  if (isDefault) {
+    await prisma.address.updateMany({
+      where: { userId: req.user!.id },
+      data: { isDefault: false },
+    });
+  }
+
+  const data: any = {};
+  if (label) data.label = label;
+  if (address) data.address = address;
+  if (city) data.city = city;
+  if (state) data.state = state;
+  if (zip) data.zip = zip;
+  if (isDefault !== undefined) data.isDefault = isDefault;
+  if (lat !== null) data.lat = lat;
+  if (lng !== null) data.lng = lng;
+
+  try {
+    await prisma.address.update({
+      where: { id: req.params.id as string },
+      data,
+    });
+  } catch (error) {
+    return res.status(404).json({ message: "Address not found" });
+  }
+
+  const addresses = await prisma.address.findMany({
+    where: { userId: req.user!.id },
+    orderBy: { createdAt: "asc" },
+  });
+
+  res.json({ addresses });
+};
