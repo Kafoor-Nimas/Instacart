@@ -1,4 +1,3 @@
-import { True } from "./../generated/prisma/internal/prismaNamespace";
 // Login Delivery Partner
 
 import { Request, Response } from "express";

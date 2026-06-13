@@ -8,6 +8,7 @@ import orderRouter from "./routes/orderRoutes.js";
 import { serve } from "inngest/express";
 import { inngest, functions } from "./inngest/index.js";
 import addressRouter from "./routes/addressRoutes.js";
+import deliveryPartnerRouter from "./routes/deliveryPartnerRoutes.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api/orders", orderRouter);
 // Set up the "/api/inngest" (recommended) routes with the serve handler
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/addresses", addressRouter);
+app.use("/api/delivery", deliveryPartnerRouter);
 
 // Error handling
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
