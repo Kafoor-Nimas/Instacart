@@ -45,3 +45,25 @@ export const loginPartner = async (req: Request, res: Response) => {
 
   res.json({ partner: partnerData, token });
 };
+
+// Get assigned deliveries
+// GET /api/delivery/my-deliveries
+export const getMyDeliveries = async (req: Request, res: Response) => {
+  const { status } = req.query;
+
+  const where: any = { deliveryPartnerId: req.partner!.id };
+
+  if (status === "active") {
+    where.status = { in: ["Assigned", "Packed", "Out for Delivery"] };
+  } else if (status === "completed") {
+    where.status = { in: ["Delivered", "Cancelled"] };
+  }
+
+  const orders = await prisma.order.findMany({
+    where,
+    include: { user: { select: { name: true, email: true, phone: true } } },
+    orderBy: { createdAt: "desc" },
+  });
+
+  res.json({ orders });
+};
