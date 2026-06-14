@@ -7,6 +7,8 @@ import {
 } from "react";
 import type { User } from "../types";
 import { useNavigate } from "react-router-dom";
+import api from "../config/api";
+import toast from "react-hot-toast";
 
 interface AuthContextType {
   user: User | null;
@@ -37,6 +39,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     setLoading(false);
   }, []);
+
+  //  functions
+
+  const login = async (email: string, password: string) => {
+    try {
+      const { data } = await api.post("/auth/login", { email, password });
+      setUser(data.user);
+      setToken(data.token);
+      localStorage.setItem("auth_token", data.token);
+      localStorage.setItem("auth_user", JSON.stringify(data.user));
+      toast.success("Login successful");
+      navigate("/");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || error?.message);
+    }
+  };
+  const register = async (name: string, email: string, password: string) => {
+    try {
+      const { data } = await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
+      setUser(data.user);
+      setToken(data.token);
+      localStorage.setItem("auth_token", data.token);
+      localStorage.setItem("auth_user", JSON.stringify(data.user));
+      toast.success("Registration successful");
+      navigate("/");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || error?.message);
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("auth_user");
+  };
 
   return <AuthContext.Provider value={}>{children}</AuthContext.Provider>;
 }
