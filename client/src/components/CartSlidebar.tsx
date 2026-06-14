@@ -66,7 +66,7 @@ const CartSlidebar = () => {
           ) : (
             items.map((item) => (
               <div
-                key={item.product._id}
+                key={item.product.id}
                 className="flex gap-3 bg-app-cream/60 rounded-xl p-3"
               >
                 <img
@@ -86,7 +86,7 @@ const CartSlidebar = () => {
                     <div className="flex items-center gap-1.5">
                       <button
                         onClick={() =>
-                          updateQuantity(item.product._id, item.quantity - 1)
+                          updateQuantity(item.product.id, item.quantity - 1)
                         }
                         className="size-7 rounded-lg bg-white border border-app-border flex-center"
                       >
@@ -98,7 +98,7 @@ const CartSlidebar = () => {
                       </span>
                       <button
                         onClick={() =>
-                          updateQuantity(item.product._id, item.quantity + 1)
+                          updateQuantity(item.product.id, item.quantity + 1)
                         }
                         className="size-7 rounded-lg bg-white border border-app-border flex-center"
                       >
@@ -111,7 +111,7 @@ const CartSlidebar = () => {
                         {(item.product.price * item.quantity).toFixed(2)}
                       </span>
                       <button
-                        onClick={() => removeFromCart(item.product._id)}
+                        onClick={() => removeFromCart(item.product.id)}
                         className="p-1 text-app-text-light hover:text-app-error transition-colors"
                       >
                         <Trash2Icon className="size-4" />

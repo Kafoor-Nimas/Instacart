@@ -8,14 +8,14 @@ interface Props {
 }
 
 const ProductCard = ({ product }: Props) => {
-  const {setIsCartOpen}=useCart()
+  const { setIsCartOpen } = useCart();
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL;
 
-  const { addToCart } = useCart()
+  const { addToCart } = useCart();
   const navigate = useNavigate();
   return (
     <div
-      onClick={() => navigate(`/products/${product._id}`)}
+      onClick={() => navigate(`/products/${product.id}`)}
       className="bg-white rounded-2xl overflow-hidden shadow hover:shadow-md transition-all duration-300 group animate-fade-in cursor-pointer"
     >
       {/* Image */}

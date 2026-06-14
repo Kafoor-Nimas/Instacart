@@ -12,7 +12,7 @@ const FlashDeals = () => {
   useEffect(() => {
     setProducts(dummyProducts.filter((p: any) => p.stock > 0));
     setTimeout(() => setLoading(false), 1000);
-  },[]);
+  }, []);
   return (
     <div className="min-h-screen bg-app-cream">
       {/* Banner */}
@@ -49,7 +49,7 @@ const FlashDeals = () => {
             {products.map(
               (product) =>
                 product.stock > 0 && (
-                  <ProductCard key={product._id} product={product} />
+                  <ProductCard key={product.id} product={product} />
                 ),
             )}
           </div>
