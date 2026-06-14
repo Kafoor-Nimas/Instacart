@@ -80,7 +80,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("auth_user");
   };
 
-  return <AuthContext.Provider value={}>{children}</AuthContext.Provider>;
+  const updateUser = (userData: Partial<User>) => {
+    if (user) {
+      const updated = { ...user, ...userData }; //...userData = spread new fields (overwrites matching ones)
+      setUser(updated);
+      localStorage.setItem("auth_user", JSON.stringify(updated));
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        loading,
+        login,
+        register,
+        logout,
+        updateUser,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
