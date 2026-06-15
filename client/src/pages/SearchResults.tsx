@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Product } from "../types";
 import { Link, useSearchParams } from "react-router-dom";
-import { dummyProducts } from "../assets/assets";
 import { Home, Search } from "lucide-react";
 import Loading from "../components/Loading";
 import ProductCard from "../components/ProductCard";
