@@ -12,7 +12,7 @@ export const getAddresses = async (req: Request, res: Response) => {
   res.json({ addresses });
 };
 
-// Add address
+// Add address 
 // POST /api/addresses
 export const addAddress = async (req: Request, res: Response) => {
   const { label, address, city, state, zip, isDefault, lat, lng } = req.body;
