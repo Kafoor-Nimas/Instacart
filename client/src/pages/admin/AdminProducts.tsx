@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { PlusIcon, EditIcon, XIcon } from "lucide-react";
 import type { Product } from "../../types";
 import Loading from "../../components/Loading";
+import api from "../../config/api";
+import toast from "react-hot-toast";
 
 export default function AdminProducts() {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
@@ -11,10 +13,14 @@ export default function AdminProducts() {
   const [loading, setLoading] = useState(true);
 
   const fetchProducts = async () => {
-    setProducts(dummyProducts);
-    setTimeout(() => {
+    try {
+      const { data } = await api.get("/products");
+      setProducts(data.products);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error?.message);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   useEffect(() => {
@@ -28,7 +34,14 @@ export default function AdminProducts() {
       )
     )
       return;
-    console.log(id);
+
+    try {
+      await api.delete(`/products/${id}`);
+      toast.success("Product marked as out of stock");
+      fetchProducts();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to update pro");
+    }
   };
 
   if (loading) return <Loading />;
