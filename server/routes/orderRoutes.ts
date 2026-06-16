@@ -14,8 +14,8 @@ const orderRouter = express.Router();
 
 orderRouter.post("/", auth, createOrder);
 orderRouter.get("/", auth, getUserOrders);
-orderRouter.get("/:id", auth, getSingleOrder);
 orderRouter.get("/all", auth, admin, getAllOrders);
+orderRouter.get("/:id", auth, getSingleOrder);
 orderRouter.put("/:id/status", auth, admin, updateOrderStatus);
 orderRouter.get("/:id/location", auth, getOrderLocation);
 

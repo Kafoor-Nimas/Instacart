@@ -3,10 +3,8 @@ import { TruckIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import type { DeliveryPartner } from "../../types";
 import Loading from "../../components/Loading";
-import {
-  dummyDashboardOrdersData,
-  dummyDeliveryPartnerData,
-} from "../../assets/assets";
+
+import api from "../../config/api";
 
 export default function AdminOrders() {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
@@ -18,13 +16,21 @@ export default function AdminOrders() {
   const [selectedPartner, setSelectedPartner] = useState("");
 
   const fetchOrders = async () => {
-    setOrders(dummyDashboardOrdersData);
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      const { data } = await api.get("/orders/all");
+      setOrders(data.orders);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to load orders");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchPartners = async () => {
-    setPartners(dummyDeliveryPartnerData as any);
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      const { data } = await api.get("/admin/delivery-partners");
+      setPartners(data.partners.filter((p: DeliveryPartner) => p.isActive));
+    } catch {}
   };
 
   useEffect(() => {
@@ -33,14 +39,28 @@ export default function AdminOrders() {
   }, []);
 
   const handleStatusChange = async (id: string, newStatus: string) => {
-    console.log(id, newStatus);
+    try {
+      await api.put(`/orders/${id}/status`, { status: newStatus });
+      toast.success("Order status updated");
+      fetchOrders();
+    } catch (error: any) {
+      toast.error(error.response?.data.message || "Failed to update status");
+    }
   };
 
   const handleAssign = async () => {
     if (!assignModal || !selectedPartner) return;
-    toast.success("Delivery partner assigned!");
-    setAssignModal(null);
-    setSelectedPartner("");
+    try {
+      await api.put(`/admin/orders/${assignModal}/assign`, {
+        partnerId: selectedPartner,
+      });
+      toast.success("Delivery partner assigned!");
+      setAssignModal(null);
+      setSelectedPartner("");
+      fetchOrders();
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed");
+    }
   };
 
   const statusOptions = [

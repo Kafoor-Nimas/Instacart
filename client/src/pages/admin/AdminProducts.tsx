@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { PlusIcon, EditIcon, XIcon } from "lucide-react";
 import type { Product } from "../../types";
 import Loading from "../../components/Loading";
-import { dummyProducts } from "../../assets/assets";
 
 export default function AdminProducts() {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
