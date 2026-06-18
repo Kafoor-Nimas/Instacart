@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsx server.ts",
-    "server": "nodemon --exec tsx server.ts",
+    "server": "tsx --watch server.ts",
     "build": "tsc",
     "seed": "tsx seed.ts"
   },
