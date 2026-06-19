@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { PlusIcon, XIcon, TruckIcon, PhoneIcon, MailIcon } from "lucide-react";
 import type { DeliveryPartner } from "../../types";
 import Loading from "../../components/Loading";
-import { dummyDeliveryPartnerData } from "../../assets/assets";
+import api from "../../config/api";
+import toast from "react-hot-toast";
 
 export default function AdminDeliveryPartners() {
   const [partners, setPartners] = useState<DeliveryPartner[]>([]);
@@ -18,8 +19,14 @@ export default function AdminDeliveryPartners() {
   });
 
   const fetchPartners = async () => {
-    setPartners(dummyDeliveryPartnerData as any);
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      const { data } = await api.get("/admin/delivery-partners");
+      setPartners(data.partners);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -28,10 +35,34 @@ export default function AdminDeliveryPartners() {
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+    setSaving(true);
+    try {
+      await api.post("/admin/delivery-partners", form);
+      toast.success("Partner onboarded successfully");
+      setShowForm(false);
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+        phone: "",
+        vehicleType: "bike",
+      });
+      fetchPartners();
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const toggleActive = async (id: string, isActive: boolean) => {
-    console.log(id, isActive);
+    try {
+      await api.put(`/admin/delivery-partners/${id}`, { isActive: !isActive });
+      toast.success(isActive ? "Partner deactivated" : "Partner activated");
+      fetchPartners();
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed");
+    }
   };
 
   if (loading) return <Loading />;
