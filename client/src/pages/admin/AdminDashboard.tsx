@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import Loading from "../../components/Loading";
 import api from "../../config/api";
+import { statusColors } from "../../assets/assets";
 
 interface Stats {
   totalOrders: number;
