@@ -17,7 +17,7 @@ const CartSlidebar = () => {
     items,
     removeFromCart,
     updateQuantity,
-    cartCount,
+    
     isCartOpen,
     setIsCartOpen,
     cartTotal,

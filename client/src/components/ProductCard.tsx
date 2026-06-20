@@ -8,7 +8,7 @@ interface Props {
 }
 
 const ProductCard = ({ product }: Props) => {
-  const { setIsCartOpen } = useCart();
+  // const { setIsCartOpen } = useCart();
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL;
 
   const { addToCart } = useCart();
