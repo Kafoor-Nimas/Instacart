@@ -189,5 +189,5 @@ export const updateLocation = async (req: Request, res: Response) => {
     where: { id: order!.id },
     data: { liveLocation: { lat, lng, updatedAt: new Date() } },
   });
-  res.json({ success: True });
+  res.json({ success: true });
 };
