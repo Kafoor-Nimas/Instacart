@@ -89,6 +89,21 @@ export default function DeliveryDashboard() {
         maximumAge: 10000,
       },
     );
+
+    // Also send on interval for more consistent updates
+    const interval = setInterval(() => {
+      navigator.geolocation.getCurrentPosition(sendLocation, () => {}, {
+        enableHighAccuracy: true,
+      });
+    }, 10000);
+
+    return () => {
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+      clearInterval(interval);
+    };
   }, [orders, tracking]);
 
   const handleUpdateStatus = async (orderId: string, status: string) => {
