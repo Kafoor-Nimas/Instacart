@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PackageIcon, NavigationIcon } from "lucide-react";
 import OtpModal from "../../components/Delivery/OtpModal";
 import CancelModal from "../../components/Delivery/CancelModal";
@@ -31,6 +31,8 @@ export default function DeliveryDashboard() {
   const [cancelModal, setCancelModal] = useState<string | null>(null);
   const [cancelReason, setCancelReason] = useState("");
 
+  const watchIdRef = useRef<number | null>(null);
+
   const fetchOrders = async () => {
     setLoading(true);
     try {
@@ -51,6 +53,43 @@ export default function DeliveryDashboard() {
   useEffect(() => {
     fetchOrders();
   }, [tab]);
+
+  // Send location every 10s for active deliveries
+  useEffect(() => {
+    const activeOrders = orders.filter((o) =>
+      ["Assigned", "Packed", "Out for Delivery"].includes(o.status),
+    );
+
+    if (activeOrders.length === 0 || !tracking) {
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+      return;
+    }
+    const sendLocation = (pos: GeolocationPosition) => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+
+      activeOrders.forEach((order) => {
+        axios
+          .put(
+            `${API_URL}/delivery/my-deliveries/${order.id}/location`,
+            { lat, lng },
+            getAuthHeaders(),
+          )
+          .catch(() => {});
+      });
+    };
+
+    watchIdRef.current = navigator.geolocation.watchPosition(
+      sendLocation,
+      () => {},
+      {
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+      },
+    );
+  }, [orders, tracking]);
 
   const handleUpdateStatus = async (orderId: string, status: string) => {
     console.log(orderId, status);
