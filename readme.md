@@ -26,7 +26,7 @@ A full-stack grocery delivery application built with the **PERN stack** (Postgre
 
 | Storefront | Product Page |
 |---|---|
-| ![Storefront](./screenshots/storefront.png) | ![Product Page](./screenshots/product-page.png) |
+| ![Storefront](./screenshots/home.png) | ![Product Page](./screenshots/products.png) |
 
 | Checkout | Order Tracking |
 |---|---|
@@ -206,11 +206,20 @@ CLOUDINARY_API_SECRET=your_api_secret
 PORT=5000
 CLIENT_URL=http://localhost:5173
 
-# Email (optional, for notifications)
-SMTP_KEY=your_smtp_key
+# Inngest (background jobs)
+INNGEST_EVENT_KEY=your_inngest_event_key
+INNGEST_SIGNING_KEY=your_inngest_signing_key
+
+# SMTP Credentials (for low stock alerts & promotional emails)
+SENDER_EMAIL=your_sender_email@example.com
+SMTP_USER=your_smtp_user
+SMTP_PASS=your_smtp_password
+
+# Stripe (card payments)
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
 ```
 
-> ⚠️ Never commit your `.env` file. Use `.env.example` to share required variable names with collaborators.
 
 ---
 
