@@ -28,19 +28,18 @@ A full-stack grocery delivery application built with the **PERN stack** (Postgre
 |---|---|
 | ![Storefront](./screenshots/home.png) | ![Product Page](./screenshots/products.png) |
 
-| Checkout | Order Tracking |
+| Checkout | singleOrder |
 |---|---|
-| ![Checkout](./screenshots/checkout.png) | ![Order Tracking](./screenshots/order-tracking.png) |
+| ![Checkout](./screenshots/checkout.png) | ![Order Tracking](./screenshots/singleOrder.png) |
 
 | Admin Dashboard | Admin Orders |
 |---|---|
-| ![Admin Dashboard](./screenshots/admin-dashboard.png) | ![Admin Orders](./screenshots/admin-orders.png) |
+| ![Admin Dashboard](./screenshots/adminDashboard.png) | ![Admin Orders](./screenshots/adminOrders.png) |
 
 | Delivery Partner Dashboard |
 |---|
-| ![Delivery Dashboard](./screenshots/delivery-dashboard.png) |
+| ![Delivery Dashboard](./screenshots/deliveryPartner.png) |
 
-> Replace the placeholders above with actual screenshots. Create a `screenshots/` folder in your repo root and add your images there, or drag-and-drop them directly into the GitHub README editor and update the paths to the generated URLs.
 
 ---
 
