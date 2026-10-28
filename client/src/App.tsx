@@ -21,6 +21,7 @@ import AdminDeliveryPartners from "./pages/admin/AdminDeliveryPartners";
 import DeliveryLogin from "./pages/delivery/DeliveryLogin";
 import DeliveryLayout from "./pages/delivery/DeliveryLayout";
 import DeliveryDashboard from "./pages/delivery/DeliveryDashboard";
+import ChatWidget from "./components/ChatWidget";
 
 const App = () => {
   return (
@@ -54,6 +55,7 @@ const App = () => {
             <Route path="/orders" element={<MyOrders />} />
             <Route path="/order/:id" element={<OrderTracking />} />
             <Route path="/addresses" element={<Addresses />} />
+            <Route path="/chat" element={<ChatWidget />} />
           </Route>
         </Route>
 

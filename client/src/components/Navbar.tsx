@@ -171,6 +171,10 @@ const Navbar = () => {
                         <ArrowRightIcon size={16} />
                         Deals
                       </Link>
+                      <Link to={"/chat"} className="dropdown-link md:hidden">
+                        <ArrowRightIcon size={16} />
+                        ChatBot
+                      </Link>
                       {user?.isAdmin && (
                         <Link to={"/admin/products"} className="dropdown-link">
                           <ShieldIcon
