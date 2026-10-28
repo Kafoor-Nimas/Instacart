@@ -1,4 +1,3 @@
-// src/controllers/chat.controller.ts
 import { Request, Response } from "express";
 import { GoogleGenAI } from "@google/genai";
 import { ChatRequestBody, ChatResponseBody } from "../types/express/chat.js";
@@ -14,7 +13,7 @@ Your goals:
 
 export const handleChat = async (
   req: Request<{}, {}, ChatRequestBody>,
-  res: Response<ChatResponseBody>,
+  res: Response<ChatResponseBody>
 ): Promise<Response> => {
   try {
     const { message } = req.body;
@@ -32,31 +31,52 @@ export const handleChat = async (
       console.error("❌ ERROR: GEMINI_API_KEY is missing from process.env!");
       return res.status(500).json({
         success: false,
-        message:
-          "Server configuration error: GEMINI_API_KEY is not configured.",
+        message: "Server configuration error: GEMINI_API_KEY is missing.",
       });
     }
 
-    // Initialize client dynamically when environment variables are ready
     const ai = new GoogleGenAI({ apiKey });
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
-      contents: message,
-      config: {
-        systemInstruction: INSTACART_GROCERY_SYSTEM_INSTRUCTION,
-      },
-    });
+    // Active Gemini models
+    const modelsToTry = [
+      "gemini-3.5-flash-lite",
+      "gemini-3.5-flash",
+      "gemini-3.8-flash",
+    ];
 
-    const replyText =
-      response.text || "I'm sorry, I couldn't process your grocery inquiry.";
+    let responseText = "";
+    let lastError: any = null;
+
+    for (const modelName of modelsToTry) {
+      try {
+        const response = await ai.models.generateContent({
+          model: modelName,
+          contents: message,
+          config: {
+            systemInstruction: INSTACART_GROCERY_SYSTEM_INSTRUCTION,
+          },
+        });
+
+        if (response.text) {
+          responseText = response.text;
+          break; // Success! Exit loop
+        }
+      } catch (err: any) {
+        lastError = err;
+        console.warn(`⚠️ Model ${modelName} failed (${err.status || err.message}). Trying fallback...`);
+      }
+    }
+
+    if (!responseText) {
+      throw lastError || new Error("All model endpoints failed to return a response.");
+    }
 
     return res.status(200).json({
       success: true,
-      reply: replyText,
+      reply: responseText,
     });
   } catch (error: any) {
-    console.error("Gemini API Error Detail:", error);
+    console.error("Gemini API Final Failure:", error);
     return res.status(500).json({
       success: false,
       message: "Instacart AI Assistant request failed",

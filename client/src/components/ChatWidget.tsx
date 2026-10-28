@@ -1,8 +1,13 @@
 import React, { useState } from "react";
+import { XIcon } from "lucide-react";
 import type { ChatMessage, ChatResponseBody } from "../types/chat";
 import api from "../config/api";
 
-export default function ChatWidget() {
+interface ChatWidgetProps {
+  onClose?: () => void;
+}
+
+export default function ChatWidget({ onClose }: ChatWidgetProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "init-1",
@@ -51,15 +56,16 @@ export default function ChatWidget() {
         throw new Error(data.message || "Failed to fetch AI response");
       }
     } catch (err: any) {
-      const errorMsg: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        sender: "bot",
-        text:
-          err.response?.data?.message ||
-          "Sorry, I encountered an error connecting to the AI server.",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMsg]);
+      const isOverloaded = err.response?.status === 503 || err.response?.data?.error?.includes("503");
+  const errorMsg: ChatMessage = {
+    id: (Date.now() + 1).toString(),
+    sender: "bot",
+    text: isOverloaded
+      ? "Google AI services are experiencing temporary high traffic. Retrying in a moment..."
+      : err.response?.data?.message || "Sorry, I encountered an error connecting to the AI server.",
+    timestamp: new Date(),
+  };
+  setMessages((prev) => [...prev, errorMsg]);
     } finally {
       setLoading(false);
     }
@@ -70,6 +76,15 @@ export default function ChatWidget() {
       {/* Header */}
       <div className="flex items-center justify-between rounded-t-2xl bg-emerald-600 p-4 text-white">
         <span className="text-sm font-semibold">Instacart Grocery AI 🛒</span>
+        {onClose && (
+          <button
+            onClick={onClose}
+            type="button"
+            className="rounded-lg p-1 transition hover:bg-emerald-700"
+          >
+            <XIcon size={18} />
+          </button>
+        )}
       </div>
 
       {/* Chat Messages */}

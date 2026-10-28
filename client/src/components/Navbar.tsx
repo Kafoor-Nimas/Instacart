@@ -11,21 +11,24 @@ import {
   ShoppingCartIcon,
   UserIcon,
   XIcon,
+  BotIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import ChatWidget from "./ChatWidget"; // Import your ChatWidget
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { cartCount, setIsCartOpen } = useCart();
 
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearch = (e: React.SubmitEvent) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
@@ -38,6 +41,7 @@ const Navbar = () => {
     setUserMenuOpen(false);
     navigate("/");
   };
+
   return (
     <nav className="bg-white sticky top-0 z-50 border-b border-app-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-4">
@@ -89,6 +93,16 @@ const Navbar = () => {
                 </span>
               )}
             </button>
+
+            {/* Chat Toggle Button in Navbar Actions */}
+            <button
+              onClick={() => setIsChatOpen((prev) => !prev)}
+              className="relative p-2 rounded-xl text-zinc-900 hover:bg-zinc-100 transition"
+              title="AI Grocery Assistant"
+            >
+              <BotIcon className="size-5" />
+            </button>
+
             {/* User */}
             <div className="relative">
               {user ? (
@@ -99,7 +113,7 @@ const Navbar = () => {
                   <div className="size-7 rounded-full bg-green-950 text-white flex-center">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
-                  <ChevronDownIcon className="size-3 text-zing-500" />
+                  <ChevronDownIcon className="size-3 text-zinc-500" />
                 </button>
               ) : (
                 <div className="flex-center gap-2">
@@ -171,10 +185,18 @@ const Navbar = () => {
                         <ArrowRightIcon size={16} />
                         Deals
                       </Link>
-                      <Link to={"/chat"} className="dropdown-link md:hidden">
-                        <ArrowRightIcon size={16} />
-                        ChatBot
-                      </Link>
+
+                      {/* Dropdown Menu Item */}
+                      <button
+                        onClick={() => {
+                          setIsChatOpen(true);
+                          setUserMenuOpen(false);
+                        }}
+                        className="dropdown-link w-full text-left flex items-center gap-2"
+                      >
+                        <BotIcon size={16} />
+                        AI Assistant
+                      </button>
                       {user?.isAdmin && (
                         <Link to={"/admin/products"} className="dropdown-link">
                           <ShieldIcon
@@ -204,6 +226,9 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Render ChatWidget floating overlay when isChatOpen is true */}
+      {isChatOpen && <ChatWidget onClose={() => setIsChatOpen(false)} />}
     </nav>
   );
 };
