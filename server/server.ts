@@ -1,4 +1,5 @@
-import "dotenv/config";
+// server.ts
+import "dotenv/config"; // Preloads .env immediately
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import authRouter from "./routes/authRoutes.js";
@@ -30,11 +31,11 @@ const port = process.env.PORT || 5000;
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is Live!");
 });
+
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/orders", orderRouter);
-// Set up the "/api/inngest" (recommended) routes with the serve handler
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/addresses", addressRouter);
 app.use("/api/delivery", deliveryPartnerRouter);

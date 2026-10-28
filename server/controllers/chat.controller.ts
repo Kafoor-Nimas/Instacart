@@ -1,15 +1,7 @@
+// src/controllers/chat.controller.ts
 import { Request, Response } from "express";
 import { GoogleGenAI } from "@google/genai";
 import { ChatRequestBody, ChatResponseBody } from "../types/express/chat.js";
-
-const apiKey = process.env.GEMINI_API_KEY;
-
-if (!apiKey) {
-  console.warn(" Warning: GEMINI_API_KEY is not defined in environment variables.");
-}
-
-const ai = new GoogleGenAI({ apiKey: apiKey || "" });
-
 
 const INSTACART_GROCERY_SYSTEM_INSTRUCTION = `
 You are an expert AI Shopping Assistant for an Instacart-powered Grocery E-Commerce store.
@@ -22,7 +14,7 @@ Your goals:
 
 export const handleChat = async (
   req: Request<{}, {}, ChatRequestBody>,
-  res: Response<ChatResponseBody>
+  res: Response<ChatResponseBody>,
 ): Promise<Response> => {
   try {
     const { message } = req.body;
@@ -34,22 +26,37 @@ export const handleChat = async (
       });
     }
 
-    // Call Gemini API model with Grocery Store system instructions
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+      console.error("❌ ERROR: GEMINI_API_KEY is missing from process.env!");
+      return res.status(500).json({
+        success: false,
+        message:
+          "Server configuration error: GEMINI_API_KEY is not configured.",
+      });
+    }
+
+    // Initialize client dynamically when environment variables are ready
+    const ai = new GoogleGenAI({ apiKey });
+
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.8-flash",
       contents: message,
       config: {
         systemInstruction: INSTACART_GROCERY_SYSTEM_INSTRUCTION,
       },
     });
 
-    const replyText = response.text || "I'm sorry, I couldn't process your grocery inquiry.";
+    const replyText =
+      response.text || "I'm sorry, I couldn't process your grocery inquiry.";
 
     return res.status(200).json({
       success: true,
       reply: replyText,
     });
   } catch (error: any) {
+    console.error("Gemini API Error Detail:", error);
     return res.status(500).json({
       success: false,
       message: "Instacart AI Assistant request failed",
