@@ -54,7 +54,6 @@ const App = () => {
             <Route path="/orders" element={<MyOrders />} />
             <Route path="/order/:id" element={<OrderTracking />} />
             <Route path="/addresses" element={<Addresses />} />
-            
           </Route>
         </Route>
 
