@@ -5,6 +5,7 @@ import authRouter from "./routes/authRoutes.js";
 import productRouter from "./routes/productRotes.js";
 import uploadRouter from "./routes/uploadRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
+import chatRouter from "./routes/chat.route.js";
 import { serve } from "inngest/express";
 import { inngest, functions } from "./inngest/index.js";
 import addressRouter from "./routes/addressRoutes.js";
@@ -38,6 +39,7 @@ app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/addresses", addressRouter);
 app.use("/api/delivery", deliveryPartnerRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/chat", chatRouter);
 
 // Error handling
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
